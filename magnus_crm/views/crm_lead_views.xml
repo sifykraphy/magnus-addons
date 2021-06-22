@@ -111,30 +111,30 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='function']" position="after">
-                <label for="next_activity_id"/>
-                <div>
-                    <div class="o_row mr16">
-                        <field name="next_activity_id" options="{'no_create': True, 'no_open': True}" domain="['|',('team_id','=',False),('team_id','=',team_id)]"/>
-                        <span class="oe_form_field" attrs="{'invisible': ['|', ('next_activity_id', '=', False), ('date_action', '=', False)]}"> on </span>
-                        <field name="date_action" attrs="{'invisible': [('next_activity_id', '=', False)]}" placeholder="Choose a date..."/>
-                    </div>
-                    <div>
-                        <field name="title_action" placeholder="e.g. Discuss proposal" attrs="{'invisible': [('next_activity_id', '=', False)]}"/>
-                    </div>
-                </div>
-            </xpath>
+<!--            <xpath expr="//field[@name='function']" position="after">-->
+<!--                <label for="next_activity_id"/>-->
+<!--                <div>-->
+<!--                    <div class="o_row mr16">-->
+<!--                        <field name="next_activity_id" options="{'no_create': True, 'no_open': True}" domain="['|',('team_id','=',False),('team_id','=',team_id)]"/>-->
+<!--                        <span class="oe_form_field" attrs="{'invisible': ['|', ('next_activity_id', '=', False), ('date_action', '=', False)]}"> on </span>-->
+<!--                        <field name="date_action" attrs="{'invisible': [('next_activity_id', '=', False)]}" placeholder="Choose a date..."/>-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--                        <field name="title_action" placeholder="e.g. Discuss proposal" attrs="{'invisible': [('next_activity_id', '=', False)]}"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </xpath>-->
             <xpath expr="//sheet/group/group/field[@name='partner_id']" position="replace">
             </xpath>
-            <xpath expr="//sheet/group/group/field[@name='sector_id']" position="replace">
+            <xpath expr="//sheet/group/group/field[@name='industry_id']" position="replace">
             </xpath>
-            <xpath expr="//sheet/group/group/field[@name='secondary_sector_ids']" position="replace">
+            <xpath expr="//sheet/group/group/field[@name='secondary_industry_ids']" position="replace">
             </xpath>
             <xpath expr="//sheet/group/group/field[@name='user_id']" position="before">
                 <field name="partner_id" string="Customer" options="{&quot;create_name_field&quot;: &quot;name&quot;}" context="{'default_name': contact_name, 'default_street': street, 'default_city': city, 'default_state_id': state_id, 'default_zip': zip, 'default_country_id': country_id, 'default_function': function, 'default_phone': phone, 'default_mobile': mobile, 'default_fax': fax, 'default_email': email_from, 'default_user_id': user_id, 'default_team_id': team_id}" groups="base.group_no_one"/>
                 <field name="partner_contact_id" string="Contact Person" context="{'default_parent_id': partner_id}" domain="[('is_company', '=', False), ('customer', '=', True),('parent_id', '=', partner_id),('type', '=', 'contact')]"/>
-                <field name="sector_id" placeholder="Sector" options="{&quot;no_open&quot;: True}"/>
-                <field name="secondary_sector_ids" widget="many2many_tags"/>
+                <field name="industry_id" placeholder="Sector" options="{&quot;no_open&quot;: True}"/>
+                <field name="secondary_industry_ids" widget="many2many_tags"/>
             </xpath>
             <xpath expr="//sheet/group/group/field[@name='team_id']" position="after">
                 <field name="operating_unit_id"/>
@@ -154,10 +154,10 @@
                 <xpath expr="//field[@name='contact_name']" position="before">
                     <field name="partner_name" string="Company Name"/>
                 </xpath>
-                <xpath expr="//field[@name='contact_name']" position="after">
-                    <field name="next_activity_id"/>
-                    <field name="date_action"/>
-                </xpath>
+<!--                <xpath expr="//field[@name='contact_name']" position="after">-->
+<!--                    <field name="next_activity_id"/>-->
+<!--                    <field name="date_action"/>-->
+<!--                </xpath>-->
                 <xpath expr="//field[@name='city']" position="replace">
                 </xpath>
                 <xpath expr="//field[@name='country_id']" position="replace">
@@ -208,12 +208,12 @@
             <field name="planned_revenue" position="replace">
             <field name="planned_revenue" invisible="1"/>
             </field>
-            <field name="title_action" position="replace">
-            <field name="title_action" invisible="1"/>
-            </field>
-             <field name="date_action" position="replace">
-            <field name="date_action" invisible="1"/>
-            </field>
+<!--            <field name="title_action" position="replace">-->
+<!--            <field name="title_action" invisible="1"/>-->
+<!--            </field>-->
+<!--             <field name="date_action" position="replace">-->
+<!--            <field name="date_action" invisible="1"/>-->
+<!--            </field>-->
             
             <field name="name" position="replace">
             	<field name="name" string="Topic"/>
@@ -239,9 +239,9 @@
       <record id="crm_case_tree_view_oppor_sector_magnus" model="ir.ui.view">
         <field name="name">Remove sector field from tree view</field>
         <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm_sector.crm_case_tree_view_oppor"/>
+        <field name="inherit_id" ref="crm_industry.crm_case_tree_view_oppor"/>
         <field name="arch" type="xml">
-            <field name="sector_id" position="replace"/>
+            <field name="industry_id" position="replace"/>
         </field>
     </record>
 
@@ -285,7 +285,7 @@
               <group>
                   <field name="lead_id" readonly="1" />
                   <field name="partner_id" readonly="1" />
-                  <field name="sector_id" readonly="1" />
+<!--                  <field name="sector_id" readonly="1" />-->
                   <field name="year" readonly="1" />
                   <field name="month" readonly="1" />
                   <field name="no_of_days" readonly="1" />
@@ -313,7 +313,7 @@
         <tree string="Monthly Revenue">
           <field name="lead_id" />
           <field name="partner_id" />
-          <field name="sector_id" />
+<!--          <field name="sector_id" />-->
           <field name="year" />
           <field name="month" />
           <field name="no_of_days" />
@@ -375,7 +375,7 @@
                     <filter string="Practice" name='sales_team' context="{'group_by':'department_id'}"/>
                     <filter string="Opportunity" context="{'group_by':'lead_id'}"/>
                     <filter string="Customer" context="{'group_by': 'partner_id'}"/>
-                    <filter string="Sector" context="{'group_by': 'sector_id'}"/>
+<!--                    <filter string="Sector" context="{'group_by': 'sector_id'}"/>-->
                     <filter string="Year" context="{'group_by': 'date:year'}"/>
                     <filter string="Month" context="{'group_by': 'date:month'}"/>
                     <filter string="Project" context="{'group_by': 'project_id'}"/>
@@ -489,17 +489,17 @@
       <record model="ir.ui.view" id="crm_case_form_view_leads_magnus">
         <field name="name">Update sector field</field>
         <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm_sector.crm_case_form_view_leads"/>
+        <field name="inherit_id" ref="crm_industry.crm_case_form_view_leads"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='sector_id']" position="attributes">
+            <xpath expr="//field[@name='industry_id']" position="attributes">
                 <attribute name="readonly">1</attribute>
             </xpath>
-            <xpath expr="//field[@name='secondary_sector_ids']" position="attributes">
+            <xpath expr="//field[@name='secondary_industry_ids']" position="attributes">
                 <attribute name="readonly">1</attribute>
             </xpath>
         </field>
       </record>
-      
+<!--      -->
       
       
 	<record model="ir.ui.view" id="view_create_opportunity_simplified_inherit">
@@ -513,19 +513,19 @@
         </field>
       </record>
       
-      <record model="ir.ui.view" id="crm_case_form_view_oppor_magnus">
-        <field name="name">Update sector field</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm_sector.crm_case_form_view_oppor"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='sector_id']" position="attributes">
-                <attribute name="readonly">1</attribute>
-            </xpath>
-            <xpath expr="//field[@name='secondary_sector_ids']" position="attributes">
-                <attribute name="readonly">1</attribute>
-            </xpath>
-        </field>
-      </record>
+<!--      <record model="ir.ui.view" id="crm_case_form_view_oppor_magnus">-->
+<!--        <field name="name">Update sector field</field>-->
+<!--        <field name="model">crm.lead</field>-->
+<!--        <field name="inherit_id" ref="crm_industry.crm_case_form_view_oppor"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//field[@name='industry_id']" position="attributes">-->
+<!--                <attribute name="readonly">1</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='secondary_industry_ids']" position="attributes">-->
+<!--                <attribute name="readonly">1</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--      </record>-->
 
       <record id="crm.crm_lead_all_leads" model="ir.actions.act_window">
         <field name="context">{'default_type':'lead', 'search_default_type': 'lead', 'needaction_menu_ref': 'crm.menu_crm_opportunities', 'search_default_to_process':1, 'readonly_by_pass': True}</field>
@@ -535,29 +535,29 @@
         <field name="context">{'default_type': 'opportunity', 'default_user_id': uid, 'search_default_assigned_to_me': 1, 'readonly_by_pass': True}</field>
       </record>
 
-		<record model="ir.ui.view" id="crm_lead_view_tree_activity_inherit">
-        <field name="name">crm.lead.tree</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="crm.crm_lead_view_tree_activity"/>
-        <field name="arch" type="xml">
-        	<xpath expr="//tree" position="replace">
-	        	<tree string="Next Activity" decoration-danger="date_action and (date_action &lt; current_date)" default_order="date_action">
-	                    <field name="date_action"/>
-	                    <field name="next_activity_id"/>                    
-	                    <field name="name" string="Topic"/>
-	                    <field name="partner_id" string="Potential customer"/>
-	                    <field name="date_deadline"/>
-	                    <field name="planned_revenue"/>
-	                    <field name="priority"/>
-	                    <field name="probability"/>
-	                    <field name="user_id" string="Owner"/>
-	                    <field name="department_id" string="Practice"/>
-	                    <field name="tag_ids" string="Proposition"/>
-	                    <field name="stage_id"/>
-                </tree>
-        	</xpath>
-        </field>
-        </record>
+<!--		<record model="ir.ui.view" id="crm_lead_view_tree_activity_inherit">-->
+<!--        <field name="name">crm.lead.tree</field>-->
+<!--        <field name="model">crm.lead</field>-->
+<!--        <field name="inherit_id" ref="crm.crm_lead_view_tree_activity"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--        	<xpath expr="//tree" position="replace">-->
+<!--	        	<tree string="Next Activity" decoration-danger="date_action and (date_action &lt; current_date)" default_order="date_action">-->
+<!--	                    <field name="date_action"/>-->
+<!--	                    <field name="next_activity_id"/>                    -->
+<!--	                    <field name="name" string="Topic"/>-->
+<!--	                    <field name="partner_id" string="Potential customer"/>-->
+<!--	                    <field name="date_deadline"/>-->
+<!--	                    <field name="planned_revenue"/>-->
+<!--	                    <field name="priority"/>-->
+<!--	                    <field name="probability"/>-->
+<!--	                    <field name="user_id" string="Owner"/>-->
+<!--	                    <field name="department_id" string="Practice"/>-->
+<!--	                    <field name="tag_ids" string="Proposition"/>-->
+<!--	                    <field name="stage_id"/>-->
+<!--                </tree>-->
+<!--        	</xpath>-->
+<!--        </field>-->
+<!--        </record>-->
         
        <record model="ir.ui.view" id="crm_stage_form_inherit">
         <field name="name">crm.stage</field>

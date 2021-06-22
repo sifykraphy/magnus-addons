@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from odoo.exceptions import ValidationError, Warning
 
 class HrTimesheetSheet(models.Model):
-    _inherit = "hr_timesheet_sheet.sheet"
+    _inherit = "hr_timesheet.sheet"
 
     def merge_leave_request(self, date, data):
         previous_date = datetime.strftime(date - timedelta(days=1), "%Y-%m-%d")

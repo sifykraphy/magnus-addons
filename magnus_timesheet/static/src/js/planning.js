@@ -82,7 +82,7 @@ var WeeklyPlanning = form_common.FormWidget.extend(form_common.ReinitializeWidge
         this.querying = true;
         var commands = this.field_manager.get_field_value("planning_ids");
         var self = this;
-        this.res_o2m_drop.add(new Model(this.view.model).call("resolve_2many_commands", 
+        this.res_o2m_drop.add(new Model(this.view.model).call("resolve_2many_commands",
                 ["planning_ids", commands, [], new data.CompoundContext()]))
             .done(function(result) {
                 self.set({sheets: result});

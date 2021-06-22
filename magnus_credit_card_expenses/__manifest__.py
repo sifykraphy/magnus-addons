@@ -43,12 +43,12 @@ defined. This is used for reconciliation of the expenses and the final expense i
     'website' : 'http://www.magnus.nl',
     'depends' : ['magnus_expense'],
     'data'    : [
-        'security/hr_expense_security.xml',
-        'security/ir.model.access.csv',
-        'security/ir_rule.xml',
-        'views/company_view.xml',
-        'views/hr_expense_views.xml',
-        'views/menu_view.xml',
+        # 'security/hr_expense_security.xml',
+        # 'security/ir.model.access.csv',
+        # 'security/ir_rule.xml',
+        # 'views/company_view.xml',
+        # 'views/hr_expense_views.xml',
+        # 'views/menu_view.xml',
         ],
     'demo' : [],
     'installable': True

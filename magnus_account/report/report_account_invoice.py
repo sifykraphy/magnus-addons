@@ -18,35 +18,35 @@
 #
 ##############################################################################
 
-import time
-from datetime import datetime
-from odoo.report import report_sxw
-
-class account_invoice(report_sxw.rml_parse):
-
-    def __init__(self, cr, uid, name, context=None):
-        super(account_invoice, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update({
-            'time': time,
-            'get_date': self.get_date,
-            'new_date': self.new_date,
-        })
-
-    def get_date(self, invoice_date):
-        if not invoice_date:
-            return False
-        return datetime.strptime(invoice_date, "%Y-%m-%d").strftime('%d-%m-%Y')
-
-    def new_date(self, period_id):
-        if not period_id:
-            return False
-        return datetime.strptime(period_id.date_start, "%Y-%m-%d").strftime('%B %Y')
-
-report_sxw.report_sxw(
-    'report.account.invoice.custom',
-    'account.invoice',
-    'addons/magnus_account/report/report_account_invoice_print.rml',
-    parser=account_invoice,
-)
+# import time
+# from datetime import datetime
+# from odoo.report import report_sxw
+#
+# class account_invoice(report_sxw.rml_parse):
+#
+#     def __init__(self, cr, uid, name, context=None):
+#         super(account_invoice, self).__init__(cr, uid, name, context=context)
+#         self.localcontext.update({
+#             'time': time,
+#             'get_date': self.get_date,
+#             'new_date': self.new_date,
+#         })
+#
+#     def get_date(self, invoice_date):
+#         if not invoice_date:
+#             return False
+#         return datetime.strptime(invoice_date, "%Y-%m-%d").strftime('%d-%m-%Y')
+#
+#     def new_date(self, period_id):
+#         if not period_id:
+#             return False
+#         return datetime.strptime(period_id.date_start, "%Y-%m-%d").strftime('%B %Y')
+#
+# report_sxw.report_sxw(
+#     'report.account.invoice.custom',
+#     'account.invoice',
+#     'addons/magnus_account/report/report_account_invoice_print.rml',
+#     parser=account_invoice,
+# )
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

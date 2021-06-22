@@ -63,7 +63,7 @@
                             <field name="account_id"
                                    groups="account.group_account_user"
                                    domain="[
-                                   ('company_id', '=', parent.company_id),
+                                   ('company_id', '=', parent.company_id),'&amp;',
                                    ('internal_type', '=', 'other')]"/>
                             <field name="account_analytic_id"
                                    groups="analytic.group_analytic_accounting"
@@ -84,7 +84,7 @@
                                    widget="many2many_tags"
                                    context="{'type':parent.type}"
                                    domain="[
-                                   ('type_tax_use','=','sale'),
+                                   ('type_tax_use','=','sale'),'&amp;',
                                    ('company_id', '=', parent.company_id)]"
                                    options="{'no_create': True}"/>
                             <field name="price_subtotal"/>

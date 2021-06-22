@@ -5,19 +5,19 @@ from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 from werkzeug import url_encode
 
-class HrExpenseRegisterPaymentWizard(models.TransientModel):
-
-    _inherit= "hr.expense.register.payment.wizard"
-    _description = "Hr Expense Register Payment wizard"
-
-    
-    @api.one
-    @api.constrains('amount')
-    def _check_amount(self):
-        if not self.amount > 0.0:
-            print ("removed...")
-#             raise ValidationError(_('The payment amount must be strictly positive.'))
-
+# class HrExpenseRegisterPaymentWizard(models.TransientModel):
+#
+#     _inherit= "hr.expense.register.payment.wizard"
+#     _description = "Hr Expense Register Payment wizard"
+#
+#
+#     @api.one
+#     @api.constrains('amount')
+#     def _check_amount(self):
+#         if not self.amount > 0.0:
+#             print ("removed...")
+# #             raise ValidationError(_('The payment amount must be strictly positive.'))
+#
 
 
 class account_abstract_payment(models.AbstractModel):

@@ -82,7 +82,7 @@ class hr_employee_landing_page(models.TransientModel):
             overtime_balance += x[0]
         self.overtime_balance = overtime_balance
 
-        hr_timesheet = self.env['hr_timesheet_sheet.sheet']
+        hr_timesheet = self.env['hr_timesheet.sheet']
 
         # compute private milage, Note: private_mileage is an computed field can't be calulated through SQl
         self.private_km_balance = sum(hr_timesheet.search([('employee_id', '=', self.employee_id.id)]).mapped('private_mileage'))
@@ -90,7 +90,7 @@ class hr_employee_landing_page(models.TransientModel):
         #my timesheet status
         self.env.cr.execute("""SELECT 
                                     id
-                                    FROM hr_timesheet_sheet_sheet                               
+                                    FROM hr_timesheet_sheet                              
                                     WHERE employee_id = %s
                                     AND state IN %s
                                     ORDER BY id DESC
@@ -102,12 +102,12 @@ class hr_employee_landing_page(models.TransientModel):
         #to be approved timesheet
         self.env.cr.execute("""SELECT 
                                 id
-                                FROM hr_timesheet_sheet_sheet                               
+                                FROM hr_timesheet_sheet                               
                                 WHERE
                                 state != 'done' AND
                                  id IN 
-                                    (SELECT hr_timesheet_sheet_sheet_id 
-                                    FROM hr_timesheet_sheet_sheet_res_users_rel 
+                                    (SELECT hr_timesheet_sheet_id 
+                                    FROM hr_timesheet_sheet_res_users_rel 
                                     WHERE res_users_id = %s)
                                  ORDER BY id DESC
                                   LIMIT 10 
@@ -151,24 +151,24 @@ class hr_employee_landing_page(models.TransientModel):
     vacation_balance = fields.Integer(compute='_compute_all', string="Vacation Balance")
     overtime_balance = fields.Integer(compute='_compute_all', string="Overtime Balance")
     private_km_balance = fields.Integer(compute='_compute_all', string="Private Mileage Balance")
-    emp_timesheet_status_ids = fields.Many2many('hr_timesheet_sheet.sheet', compute='_compute_all', string="My Timesheet Status")
-    emp_timesheet_to_be_approved_ids = fields.Many2many('hr_timesheet_sheet.sheet', compute='_compute_all', string="Timesheet To Be Approved")
+    emp_timesheet_status_ids = fields.Many2many('hr_timesheet.sheet', compute='_compute_all', string="My Timesheet Status")
+    emp_timesheet_to_be_approved_ids = fields.Many2many('hr_timesheet.sheet', compute='_compute_all', string="Timesheet To Be Approved")
     emp_expense_status_ids = fields.Many2many('hr.expense.sheet', compute='_compute_all', string="My Expense Status")
     emp_expense_to_be_approved_ids = fields.Many2many('hr.expense.sheet', compute='_compute_all', string="Expense To Be Approved")
     current_week = fields.Boolean(compute='_compute_all')
 
-
-    def get_upcoming_week(self):
-        result = self.env['hr.timesheet.current.open'].open_timesheet()
-        hr_timesheet = self.env['hr_timesheet_sheet.sheet']
-        if 'res_id' in result:
-            return hr_timesheet.browse(result['res_id']).week_id
-        return hr_timesheet.get_week_to_submit()
-
-    @api.multi
-    def action_view_timesheet(self):
-        self.ensure_one()
-        return self.env['hr.timesheet.current.open'].open_timesheet()
+    #
+    # def get_upcoming_week(self):
+    #     result = self.env['hr.timesheet.current.open'].open_timesheet()
+    #     hr_timesheet = self.env['hr_timesheet.sheet']
+    #     if 'res_id' in result:
+    #         return hr_timesheet.browse(result['res_id']).week_id
+    #     return hr_timesheet.get_week_to_submit()
+    #
+    # @api.multi
+    # def action_view_timesheet(self):
+    #     self.ensure_one()
+    #     return self.env['hr.timesheet.current.open'].open_timesheet()
 
     @api.multi
     def action_view_leaves_dashboard(self):
@@ -211,7 +211,7 @@ class hr_employee_landing_page(models.TransientModel):
             'name': _('Timesheet'),
             'view_type': 'from',
             'view_mode': 'tree',
-            'res_model': 'hr_timesheet_sheet.sheet',
+            'res_model': 'hr_timesheet.sheet',
             'view_id': False,
             'views': [(tree_id, 'tree')],
             'domain': [('employee_id.user_id', '=', self.env.uid)],

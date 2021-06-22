@@ -15,8 +15,8 @@ class AccountAnalyticLine(models.Model):
     account_analy_line_ids=fields.Many2many('account.move.line',string="Analytic Account Line",readonly=True)
     wip_percentage=fields.Float("WIP percentage")
     @api.depends(
-                 'sheet_id_computed.date_to',
-                 'sheet_id_computed.date_from',
+                 'sheet_id_computed.date_end',
+                 'sheet_id_computed.date_start',
                  'sheet_id_computed.employee_id',
                  )
     def _compute_sheet(self):
@@ -26,12 +26,12 @@ class AccountAnalyticLine(models.Model):
         # we first get value of sheet_id in cache, because it is empty for all to be computed fields
         # because sheet_id does not get a value when sheets is empty, we need the original value.
         # we have to filter self for records existing in db
-        self.filtered(lambda i: isinstance(i.id, (int, long))).read(['sheet_id'])
+        self.filtered(lambda i: isinstance(i.id, (int, int))).read(['sheet_id'])
         uom_hrs = self.env.ref("product.product_uom_hour").id
         for ts_line in self.filtered(lambda line: line.task_id and line.product_uom_id.id == uom_hrs):
-            sheets = self.env['hr_timesheet_sheet.sheet'].search(
-                [('date_to', '>=', ts_line.date),
-                 ('date_from', '<=', ts_line.date),
+            sheets = self.env['hr_timesheet.sheet'].search(
+                [('date_end', '>=', ts_line.date),
+                 ('date_start', '<=', ts_line.date),
                  ('employee_id.user_id.id', '=', ts_line.user_id.id),
                  ('state', 'in', ['draft', 'new'])])
             if sheets:
@@ -380,14 +380,14 @@ class AccountAnalyticLine(models.Model):
             self.company_id = self.env.user.company_id
             date = self.find_daterange_week(self.date)
             self.week_id = date.id
-        elif self.sheet_id and not self.sheet_id.date_from <= self.date <= self.sheet_id.date_to:
-            self.date = self.sheet_id.date_from
+        elif self.sheet_id and not self.sheet_id.date_start <= self.date <= self.sheet_id.date_end:
+            self.date = self.sheet_id.date_start
             return {
                 'warning': {'title': _('Error'), 'message': _('Please fill in date within timesheet dates.'), },
             }
-        elif self.env.context.get('timesheet_date_from',False) and \
-            self.env.context.get('timesheet_date_to',False) and not \
-            self.env.context.get('timesheet_date_from') <= self.date <= self.env.context.get('timesheet_date_to'):
+        elif self.env.context.get('timesheet_date_start',False) and \
+            self.env.context.get('timesheet_date_end',False) and not \
+            self.env.context.get('timesheet_date_start') <= self.date <= self.env.context.get('timesheet_date_end'):
             self.date = self.env.context.get('timesheet_date_from')
             return {
                 'warning': {'title': _('Error'), 'message': _('Please fill in date within timesheet dates.'), },

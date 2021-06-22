@@ -393,7 +393,7 @@ class AnalyticLineStatus(models.TransientModel):
                     self.env.cr.execute(line_query)
                     done_analytic_line |= analytic_line_obj
 
-        except Exception, e:
+        except Exception as e:
             # update the analytic line record into there previous state when job get failed in delay
             for id, state in notupdatestate.iteritems():
                 self.env.cr.execute("""
@@ -429,7 +429,7 @@ class AnalyticLineStatus(models.TransientModel):
                     date=date, journal=move.journal_id,
                     move_prefix='WIP Reverse', line_prefix='WIP Reverse',
                     reconcile=reconcile)
-            except Exception, e:
+            except Exception as e:
                 raise FailedJobError(
                     _("The details of the error:'%s'") % (unicode(e)))
         return reverse_move

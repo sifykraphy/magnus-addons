@@ -208,9 +208,9 @@
     <record id="hr_expense.hr_expense_actions_my_unsubmitted" model="ir.actions.act_window">
         <field name="domain">[('employee_id.user_id', '=', uid),('is_from_crdit_card','=',False)]</field>
     </record>
-    <record id="hr_expense.action_hr_expense_refused_expenses" model="ir.actions.act_window">
-        <field name="domain">[('employee_id.user_id', '=', uid),('is_from_crdit_card','=',False)]</field>
-    </record>
+<!--    <record id="hr_expense.action_hr_expense_refused_expenses" model="ir.actions.act_window">-->
+<!--        <field name="domain">[('employee_id.user_id', '=', uid),('is_from_crdit_card','=',False)]</field>-->
+<!--    </record>-->
     <record id="hr_expense.action_hr_expense_sheet_my_all" model="ir.actions.act_window">
         <field name="domain">[('employee_id.user_id', '=', uid),('is_from_crdit_card','=',False)]</field>
     </record>

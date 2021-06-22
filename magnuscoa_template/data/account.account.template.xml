@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+        <!-- Chart template -->
+        <record id="magnus_chart_template" model="account.chart.template">
+            <field name="cash_account_code_prefix">10</field>
+            <field name="bank_account_code_prefix">10</field>
+            <field name="code_digits">4</field>
+            <field name="property_account_receivable_id" ref="recv"/>
+            <field name="property_account_payable_id" ref="pay"/>
+            <field name="property_account_expense_categ_id" ref="4000"/>
+            <field name="property_account_income_categ_id" ref="8100"/>
+            <field name="property_stock_account_input_categ_id" ref="0730"/>
+            <field name="property_stock_account_output_categ_id" ref="0730"/>
+            <field name="property_stock_valuation_account_id" ref="0730"/>
+            <field name="expense_currency_exchange_account_id" ref="0730"/>
+            <field name="income_currency_exchange_account_id" ref="0730"/>
+        </record>
 
         <!-- Account template -->
         <record id="0010" model="account.account.template">
@@ -1700,21 +1715,7 @@
             <field name="tag_ids" eval="[(6,0,[ref('account_tag_44'), ref('account_tag_36')])]"/>
         </record>
 
-        <!-- Chart template -->
-        <record id="magnus_chart_template" model="account.chart.template">
-            <field name="cash_account_code_prefix">10</field>
-            <field name="bank_account_code_prefix">10</field>
-            <field name="code_digits">4</field>
-            <field name="property_account_receivable_id" ref="recv"/>
-            <field name="property_account_payable_id" ref="pay"/>
-            <field name="property_account_expense_categ_id" ref="4000"/>
-            <field name="property_account_income_categ_id" ref="8100"/>
-            <field name="property_stock_account_input_categ_id" ref="0730"/>
-            <field name="property_stock_account_output_categ_id" ref="0730"/>
-            <field name="property_stock_valuation_account_id" ref="0730"/>
-            <field name="expense_currency_exchange_account_id" ref="0730"/>
-            <field name="income_currency_exchange_account_id" ref="0730"/>
-        </record>
+
 
     </data>
 </openerp>

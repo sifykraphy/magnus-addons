@@ -12,7 +12,7 @@ from odoo.exceptions import UserError, ValidationError
 
 class MagnusPlanning(models.Model):
     _name = "magnus.planning"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread','mail.activity.mixin']
     _order = "id desc"
     _description = "Planning"
     _rec_name = "user_id"

@@ -5,7 +5,7 @@ odoo.define('magnus_timesheet.sheet', function (require) {
     var Model = require('web.DataModel');
     var form_common = require('web.form_common');
     var QWeb = core.qweb;
-    var hr_timesheet_task = require('hr_timesheet_task.sheet');
+//    var hr_timesheet_task = require('hr_timesheet_task.sheet');
 
     core.form_custom_registry.get('weekly_timesheet').include({
 
@@ -57,8 +57,9 @@ odoo.define('magnus_timesheet.sheet', function (require) {
                 self.onchange_project_id();
             });
 
-            self.$(".oe_timesheet_weekly_input").focusout(function() {
-                var elms = document.getElementsByClassName('oe_timesheet_weekly_input');
+            self.$("o_field_float o_field_number o_field_widget o_input").focusout(function() {
+                var elms = document.getElementsByClassName('o_field_float o_field_number o_field_widget o_input');
+                console.log("RRRRRRRRRRRRRRR",elms)
                 for (var i = 0; i < elms.length; i++) {
                     var hour = elms[i].value.slice(0, -3);
                     if (hour > "24" || hour < 0) {

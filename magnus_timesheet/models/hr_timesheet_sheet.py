@@ -10,14 +10,14 @@ from dateutil.relativedelta import relativedelta
 from openerp.tools.float_utils import float_compare
 
 class HrTimesheetSheet(models.Model):
-    _inherit = "hr_timesheet_sheet.sheet"
+    _inherit = "hr_timesheet.sheet"
     _order = "week_id desc"
 
     def get_week_to_submit(self):
         dt = datetime.now()
         emp_obj = self.env['hr.employee'].search([('user_id', '=', self.env.uid)], limit=1)
         emp_id = emp_obj.id if emp_obj else False
-        timesheets = self.env['hr_timesheet_sheet.sheet'].search([('employee_id', '=', emp_id)])
+        timesheets = self.env['hr_timesheet.sheet'].search([('employee_id', '=', emp_id)])
         logged_weeks = timesheets.mapped('week_id').ids if timesheets else []
         date_range = self.env['date.range']
         date_range_type_cw_id = self.env.ref(
@@ -30,12 +30,10 @@ class HrTimesheetSheet(models.Model):
                             ('date_end', '<', dt - timedelta(days=dt.weekday()))]
         if employement_week:
             past_week_domain += [('date_start', '>=', employement_week.date_start)]
-
         if logged_weeks:
             past_week_domain += [('id', 'not in', logged_weeks)]
         past_weeks = date_range.search(past_week_domain, limit=1, order='date_start')
         week = date_range.search([('type_id', '=', date_range_type_cw_id), ('date_start', '=', dt - timedelta(days=dt.weekday()))], limit=1)
-
         if week or past_weeks:
             if past_weeks and past_weeks.id not in logged_weeks:
                 return past_weeks
@@ -48,6 +46,7 @@ class HrTimesheetSheet(models.Model):
                     ('date_start', '>', dt-timedelta(days=dt.weekday()))
                 ], order='date_start', limit=1)
                 if upcoming_week:
+                    print("upcoming Week", upcoming_week)
                     return upcoming_week
                 else:
                     return False
@@ -69,7 +68,7 @@ class HrTimesheetSheet(models.Model):
     def _get_week_domain(self):
         emp_id = self.env['hr.employee'].search([('user_id', '=', self.env.uid)], limit=1)
         emp_id = emp_id.id if emp_id else False
-        timesheets = self.env['hr_timesheet_sheet.sheet'].search([('employee_id', '=', emp_id)])
+        timesheets = self.env['hr_timesheet.sheet'].search([('employee_id', '=', emp_id)])
         logged_weeks = timesheets.mapped('week_id').ids if timesheets else []
         date_range_type_cw_id = self.env.ref(
             'magnus_date_range_week.date_range_calender_week').id
@@ -93,8 +92,8 @@ class HrTimesheetSheet(models.Model):
                     ('model','=','fleet.vehicle'),
                     ('relation_model','=','res.partner'),
                     ('relation_ref', '=', user.partner_id.id),
-                    ('date_from', '<', self.date_from),
-                    ('date_to', '>=', self.date_to)],limit=1)
+                    ('date_from', '<', self.date_start),
+                    ('date_to', '>=', self.date_end)],limit=1)
                 if dtt_vehicle:
                     vehicle = self.env['fleet.vehicle'].sudo().search([
                         ('id', '=', dtt_vehicle.model_ref)], limit=1)
@@ -201,12 +200,12 @@ class HrTimesheetSheet(models.Model):
         'account.analytic.line',
         string="Overtime Entry"
     )
-    date_from = fields.Date(
+    date_start = fields.Date(
         related='week_id.date_start',
         string='Date From',
         store=True,
     )
-    date_to = fields.Date(
+    date_end = fields.Date(
         related='week_id.date_end',
         string='Date To',
         store=True,
@@ -229,7 +228,7 @@ class HrTimesheetSheet(models.Model):
             if new_user_id:
                 self.env.cr.execute('''
                         SELECT id
-                        FROM hr_timesheet_sheet_sheet
+                        FROM hr_timesheet_sheet
                         WHERE week_id=%s
                         AND user_id=%s''',
                         (sheet.week_id.id, new_user_id)
@@ -240,7 +239,7 @@ class HrTimesheetSheet(models.Model):
 
     @api.onchange('employee_id')
     def onchange_employee_id(self):
-        super(HrTimesheetSheet, self).onchange_employee_id()
+        # super(HrTimesheetSheet, self).onchange_employee_id()
         return {'domain': {'week_id': self._get_week_domain()}}
 
     def duplicate_last_week(self):
@@ -258,7 +257,7 @@ class HrTimesheetSheet(models.Model):
                 ('date_end', '=', date_end)
             ], limit=1)
             if last_week:
-                last_week_timesheet = self.env['hr_timesheet_sheet.sheet'].search([
+                last_week_timesheet = self.env['hr_timesheet.sheet'].search([
                     ('employee_id', '=', self.employee_id.id),
                     ('week_id', '=', last_week.id)
                 ], limit=1)
@@ -497,7 +496,7 @@ class HrTimesheetSheet(models.Model):
              ON aaa.id = aal.account_id
              LEFT JOIN project_invoicing_properties ip
              ON ip.id = pp.invoice_properties
-             RIGHT JOIN hr_timesheet_sheet_sheet hss
+             RIGHT JOIN hr_timesheet_sheet hss
              ON hss.id = aal.sheet_id
              LEFT JOIN date_range dr 
              ON (dr.type_id = 2 and dr.date_start <= aal.date +7 and dr.date_end >= aal.date + 7)
@@ -616,7 +615,7 @@ class HrTimesheetSheet(models.Model):
              ON aaa.id = aal.account_id
              LEFT JOIN project_invoicing_properties ip
              ON ip.id = pp.invoice_properties
-             RIGHT JOIN hr_timesheet_sheet_sheet hss
+             RIGHT JOIN hr_timesheet_sheet hss
              ON hss.id = aal.sheet_id
              LEFT JOIN date_range dr 
              ON (dr.type_id = 2 and dr.date_start <= aal.date +7 and dr.date_end >= aal.date + 7)
